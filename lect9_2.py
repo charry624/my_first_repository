@@ -1,307 +1,335 @@
 """
-import multiprocessing as mp 
-import time
+from bs4 import BeautifulSoup as bs 
+import requests as rq 
 
-def counter(str_name):
-    for i in range(50000):
-        print(f"Countdown{i},name:{str_name}\n")
-        
-if __name__ == "__main__":
-    process1 = mp.Process(target=counter, args=("1num",))
-    process2 = mp.Process(target=counter, args=("2num",))
-    process3 = mp.Process(target=counter, args=("3num",))
-
-    start = time.time()
-    
-    process1.start()
-    process2.start()
-    process3.start()
-
-    process1.join()
-    process2.join()
-    process3.join()
-    end = time.time()
-    
-    print("proc-end", end-start)
- 
-    
-import asyncio
-import random as rd
-import time
-
-async def tester(name):
-    snum = rd.randint(10,20)
-    print(f"{name}-{snum}")
-    for i in range(snum):
-        await asyncio.sleep(1)
-        print(f"{name}-{snum}-{i}")
-
-    print(f"end of {name}")
-    
-async def main():
-        
-    task1 = asyncio.create_task(tester("1test"))
-    
-    task2 = asyncio.create_task(tester("2test"))
-    
-    task3 = asyncio.create_task(tester("3test"))    
-    
-    print("start")
-    start = time.time()
-    await task1
-    await task2
-    await task3
-    end = time.time()
-    print("end", end-start)
-    
-if __name__ == '__main__':
-    asyncio.run(main())
-    
-      
-import asyncio
-import time
-async def worker1():
-    for i in range(1, 6):
-        print(f"Task 1: Step {i}")
-        await asyncio.sleep(1)
-
-async def worker2():
-    for i in range(1, 4):
-        print(f"Task 1: Step {i}")
-        await asyncio.sleep(2)
-        
-async def main():
-    
-    task_1 = asyncio.create_task(worker1())
-    task_2 = asyncio.create_task(worker2())
-    
-    
-    print("start task")
-    start = time.time()
-    await task_1
-    await task_2
-    end = time.time()
-    print("end", end-start)
-    print("end task")
-    
-if __name__ == '__main__':
-    asyncio.run(main())
-    
-    
-     
-#스케줄 처리
-
-import time 
-import sched
-
-start = time.time 
-
-def tester(name):
-    print(f"start-time{time.time()-start}")
-    for i in range(3):
-        print(f"{name}-{i}")
-        
-    print(f"end of {name}")
-def run():    
-    s=sched.scheduler()
-    s.enter(5,1,tester,('1num'))
-    s.enter(3,1,tester,('2num'))
-    s.enter(7,1,tester,('3num'))
-    s.run 
-
-if __name__ == '__main__':
-    run()
-    #main()
-    print("end")
-    
-   
-     
-#문자열 비교 
-
-import diff_match_patch.diff_match_patch as dm
-
-origin = "To be or not to be, That is a question!"
-copyed = "To be and not to be, That is a question!"
-
-dmp = dm()
-diff = dmp.diff_main(origin, copyed)
-dmp.diff_cleanupSemantic(diff)
-
-for d in diff:
-    print(d)
-     
-      
-#faker - csv 파일저장
-from faker import Faker as fk
-
-#temp = fk()
-temp = fk("ko-KR")
-print(temp.name())
-
-#with open("fktemp.csv","w", newline='')as f:
-with open("fktemp.","w", newline='')as f:
-    for i in range(30):
-        f.write(temp.name() + "," + 
-	        temp.address() + "," + 
-	        temp.postcode() + "," + 
-	        temp.company() + "," + 
-	        temp.job() + "," + 
-	        temp.phone_number() + "," + 
-	        temp.email() + "," + 
-	        temp.user_name() + "," + 
-	        temp.ipv4_private() + "," + 
-	        temp.ipv4_public() + "," + 
-	        temp.catch_phrase() + "," + 
-	        temp.color_name() + "\n")
-         
-       
-import subprocess as sp
-
-#res = sp.run(["cmd", "/c", "dir"], capture_output=True)
-#res = sp.run(["cmd", "/c", "dir"], capture_output=False)
-#res = sp.run(["cmd", "/c", "ipconfig"], capture_output=False)
-#res = sp.run(["cmd", "/c","C:\Program Files\DAUM\PotPlayerMini64.exe"])
-res = sp.run(["cmd", "/c", "ipconfig"], capture_output=True)
-print(res)
-  
-import traceback as tb
-
-def tester():
-    #return 1/0
-    return 1
-
-def caller():
-    tester()
-    
-def main():
-    try :
-        caller()
-        
-    #except ZeroDivisionError :
-    #    print("zde error")
-        
-    except ValueError :
-        print("ve error")
-
-    except Exception as ex :
-        print("ex error", ex)
-        
-    else :
-        print("ok")
-        
-    finally:
-        print("end")
-        
-    #except :
-    #    print(tb.firmat_exc())
-    
-
-def main() :
-    caller()
-    
-
-
-if __name__ == '__main__':
-   main()
-
-
-from bs4 import BeautifulSoup as bs
-import requests as rq
-
-# url = "http://xkcd.com/2852/"
-url = "https://news.daum.net/"
-res = rq.get(url)
-
-hmltxt = res.text
-res_html = bs(hmltxt, 'html.parser')
-
-# pres = res_html.find("h1")
-pres = res_html.find("h2")
-print(pres)
-print("\n1-----------------------------\n")
-print(pres.get_text().strip())
-print("\n2-----------------------------\n")
-print(pres.next_element.get_text().strip())
-print(pres.get_text())
-print("\n6-----------------------------\n")
-
-tres = res_html.find("title")
-print(tres)
-print("\n3-----------------------------\n")
-print(tres.next_element)
-print("\n4-----------------------------\n")
-print(tres.get_text().strip())
-
-fares = res_html.findAll("a")
-for i in fares:
-    print(i.get_text())
-    
-#print(fares)
-print("\n5-----------------------------\n")
-
-clres = res_html.findAll(class_="doc-title")
-print(clres)
-
-print("\n6-----------------------------\n")
-clrs = res_html.find(class_="head-top")
-print(clrs)
-print(clrs.get_text())
-
-from bs4 import BeautifulSoup as bs
-import requests as rq
-
-# url = "https://entertain.daum.net/news"
-url = "https://news.daum.net/"
-res = rq.get(url)
-
-hmltxt = res.text
-res_html = bs(hmltxt, 'html.parser')
-
-item = res_html.select_one("body > div.container-doc > main > section > div > div.content-article > div.box_g.box_news_issue > ul > li:nth-child(1) > div > div > strong > a")
-
-print(item)
-print(item.get_text())
-
-from bs4 import BeautifulSoup as bs
-import requests as rq
-url = "http://table.cafe.daum.net/"
+url = "https://table.cafe.daum.net/"
 res = rq.get(url)
 
 hmltxt = res.text 
 res_html = bs(hmltxt, 'html.parser')
 item = res_html.select_one("#content_table > div.table_group > div:nth-child(3) > div.item_detail > a > strong")
 
-#print(item)
+print(item)
 print(item.get_text())
 
 wt = res_html.select_one("#content_table > div.table_group > div:nth-child(3) > div.item_detail > a > div > span.txt_name")
-#print(wt)
-print(wt.get_txt())
+print(wt)
+print(wt.get_text())
 
 goods = res_html.select_one("#content_table > div.table_group > div:nth-child(3) > div.item_reply > div > button > strong")
-#print(goods)
+print(goods)
 print(goods.get_text())
-"""
+
+#select
+
 from bs4 import BeautifulSoup as bs
 import requests as rq
 
 url = "https://news.daum.net/"
 res = rq.get(url)
 
-hmltxt = res.text 
-res_html = bs(hmltxt, 'html.parser')
+hmltxt = res.text
+res_html = bs(hmltxt,  'html.parser')
 
-iss = res_html.select("a.wrap_thumb")
-#print(iss)
-print("\n-----------------------------\n")
 
-for i in iss :
-    issue = i.get_text()
-    print(issue)
-    
-print("\n-----------------------------\n")
+#iss = res_html.select("a.wrap_thumb")
+
+print("\n------------------------------\n")
 ct = res_html.select("a.wrap_thumb")
-for j in ct:
+for j in ct :
     c = j.attrs["data-tiara-custom"]
-    print(c+"\n")
+    print(c + "\n")
     
+    #이미지 저장
+
+from bs4 import BeautifulSoup as bs
+import requests as rq
+import os
+from urllib.request import urlretrieve as rl
+
+url = "https://news.daum.net/"
+res = rq.get(url)
+
+hmltxt = res.text
+res_html = bs(hmltxt,'html.parser')
+
+imgs = res_html.select("img")
+#print(imgs)
+#print("\n---------------------------\n")
+
+linkimgs = []
+
+for i in imgs :
+    irs = i.attrs["src"]
+    print(irs +"\n")
+    linkimgs.append(irs)
+
+#print(linimgs)
+
+folder = "imgs/"
+if not os.path.isdir(folder):
+    os.mkdir(folder)
+
+
+i=0
+for ln in linkimgs :
+    if str(ln).find("//t") == False:
+        print(ln)
+        continue
+    else:
+        pass
+    
+    i += 1
+    rl(ln, folder + f"{i}.jpg")
+    
+    #print(ln)
+    #linkimgs.append(imgs.attrs['src'])
+
+
+
+#시리즈 생성
+
+from pandas import Series as sr
+
+data = [10,20,30,40]
+sdata = sr(data)
+
+print(sdata)
+
+#numpy 시리즈 생성
+
+from pandas import Series as sr
+import numpy as np
+
+#data = np.arange(5)
+data = np.arange(1,5)
+sdata = sr(data)
+
+print(sdata)
+
+
+#인덱스 확인
+
+from pandas import Series as sr
+
+data = [ 10,20,30,40]
+sdata = sr(data)
+
+print(sdata.index)
+print(sdata.index.to_list())
+
+#인덱스 설정
+
+from pandas import Series as sr
+
+data = [10,20,30,40]
+sdata=sr(data)
+
+sdata.Index = ["a","b","c","d"]
+print(sdata)
+
+
+#인덱스 생성
+
+from pandas import Series as sr
+
+dt = [10,20,30,40]
+idx = ["a","b","c","d"]
+
+#sd=sr(dt, idx)
+#print(sd)
+
+#sdata =sr(data=dt, index=idx)
+#sdata =sr(data=idt, index=dt)
+#sdata =sr(dt,idx)
+sdata = sr(index=idx, data = dt)
+print(sdata)
+
+#인덱싱
+from pandas import Series as sr
+
+dt = [10,20,30,40]
+idx = ["a","b","c","d"]
+
+sdata=sr(data=dt, index=idx)
+#print(sdata)
+
+#sd=sdata.reindex(["a", "j", "c"])
+#sd=sdata.reindex(["a", "c"])
+#print(sd)
+
+sd=sdata.reindex(["b"])
+print(sd)
+print("\n---------------------\n")
+print(sdata["a"])
+print("\n---------------------\n")
+
+print(sdata.iloc[0])
+print(sdata.loc["a"])
+#print(sdata.loc["a"])
+
+#print(sdata[0])
+
+
+#인덱싱 슬라이딩
+
+from pandas import Series as sr
+
+dt = ["alpha", "beta", "charlie", "delta"]
+idx = ["ab", "bc", "cd", "de"]
+
+sdata=sr(data=dt, index=idx)
+
+#print(sdata)
+print(sdata.loc["bc" : "cd"])
+print("\n---------------------\n")
+
+print(sdata.loc["bc" : ])
+print("\n---------------------\n")
+
+print(sdata.loc[:"bc"])
+print("\n---------------------\n")
+
+
+#인덱싱 슬라이딩
+
+from pandas import Series as sr
+
+dt = ["사과", "바나나", "수박", "참외"]
+idx = ["가", "나", "다", "라"]
+
+print(sdata.iloc[1:2])
+print("\n---------------------\n")
+
+print(sdata.iloc[2:])
+print("\n---------------------\n")
+
+print(sdata.iloc[:2])
+print("\n---------------------\n")
+
+
+#수정,추가,삭제
+
+from pandas import Series as sr
+
+dt = ["alpha", "beta", "charlie", "delta"]
+idx = ["ab", "bc", "cd", "de"]
+
+sdata=sr(data=dt, index=idx)
+
+#sdata.loc["cd"] = "echo"
+#print(sdata)
+
+#print("\n---------------------\n")
+#sdata.floc[1]="fox"
+#print(sdata)
+
+#추가
+sdata.loc["ef"] = "golf"
+print(sdata)
+
+#삭제
+print("\n---------------------\n")
+sdata.drop("bc")
+print("\n---------------------\n")
+sd =sdata.drop("cd")
+print(sd)
+
+
+#연산
+from pandas import Series as sr
+
+s1 = sr([100, 200, 300], index=["a", "b", "c"])
+s2 = sr([100, 200, 300], index=["b", "c", "a"])
+
+sum_res = s1 + s2
+print(sum_res)
+print(sum_res.max())
+print(sum_res.mean())
+print(sum_res.min())
+print("\n---------------------\n")
+
+sub_res = s1 - s2
+print(sub_res)
+print(sub_res.max())
+print(sub_res.mean())
+print(sub_res.min())
+print("\n---------------------\n")
+
+mul_res = s1 * s2 * 10
+print(mul_res)
+
+div = s1 / s2 / 10
+print(sum_res)
+
+#연산
+from pandas import Series as sr
+
+data = {
+    "삼성전자": "전기,전자",
+    "LG전자": "전기,전자",
+    "현대차": "운수장비",
+    "NAVER": "서비스업",
+    "카카오": "서비스업"
+}
+
+sdata = sr(data)
+uniq=sdata.unique()
+print(uniq)
+
+sc = sdata.count()
+print(sc)
+
+sv = data.value_counts()
+print(sv)
+
+"""
+#필터링
+from pandas import Series as sr
+
+idx = ["a", "b", "c", "d", "e"]
+s1 = sr([1100, 270, 30, 450, 50], index=idx)
+s2 = sr([150, 740, 810, 40, 25], index=idx)
+
+# 시리즈내 데이터 비
+fil = s1 > 300
+print(fil)
+
+print("\n---------------------\n")
+print(s1[fil])
+
+# 시리즈간 비교
+print("\n---------------------\n")
+fil1 = s2 > s1
+print(fil1)
+print(s2[fil1])
+
+# 인덱싱 출력
+print("\n---------------------\n")
+s2[s2 > s1].index
+
+
+#정렬
+
+from pandas import Series as sr
+
+idx = ["a", "b", "c", "d", "e"]
+s1 = sr([1100, 270, 30, 450, 50], index=idx)
+s2 = sr([150, 740, 810, 40, 25], index=idx)
+
+fil = s1 > 300
+print(fil)
+
+print("\n---------------------\n")
+print(s1[fil])
+print(s1[fil].index)
+
+print("\n---------------------\n")
+fil1 = s2 > s1
+print(fil1)
+
+print(s2[fil1])
+print(s2[fil1].index)
+
+print("\n---------------------\n")
+print(s2[s2 > s1].index)
